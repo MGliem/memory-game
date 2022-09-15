@@ -129,9 +129,7 @@ function showCard(card) {
   selectedCard.classList.add("rotate");
 
   if (globalVariables.visibleCards.length === 2) {
-    setTimeout(() => {
-      checkClickedCards();
-    }, "1000");
+    checkClickedCards();
   }
 }
 
@@ -141,26 +139,28 @@ function hideCards(card) {
   for (const child of selectedCard.children) {
     if (child.className === "show") {
       child.textContent = '';
-      
     }
   }
 }
 
+
 function checkClickedCards() {
   incrementMove();
   if (globalVariables.visibleCards[0].textContent !== globalVariables.visibleCards[1].textContent) {
-    hideCards(globalVariables.visibleCards[0]);
-    hideCards(globalVariables.visibleCards[1]);
+    setTimeout(() => {
+      hideCards(globalVariables.visibleCards[0]);
+      hideCards(globalVariables.visibleCards[1]);
+      globalVariables.visibleCards = [];
+    }, "1000");
   } else {
     globalVariables.totalFound++;
+    globalVariables.visibleCards = [];
     checkWin();
   }
-  globalVariables.visibleCards = [];
 }
 
 function checkWin() {
-  console.log(globalVariables.totalCards, globalVariables.totalFound);
-  if (globalVariables.totalCards == Math.pow(globalVariables.totalFound)) {
+  if (globalVariables.totalCards == globalVariables.totalFound * 2) {
     clearInterval(globalVariables.timerInterval);
     selectors.startStop.textContent = 'Start';
     selectors.gridSize.disabled = false;
