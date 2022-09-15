@@ -1,0 +1,93 @@
+
+body {
+    margin: 0;
+    background: linear-gradient(337deg, rgba(126,13,223,1) 0%, rgba(253,29,29,1) 50%, rgba(252,190,0,1) 100%);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.game {
+    width: fit-content;
+    margin-inline: auto;
+    margin-block-start: 3vh;
+}
+
+
+.user-interface {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 20px;
+    margin-bottom: 20px;
+    color: white;
+}
+
+button, select {
+    background-color: #242633;
+    color: white;
+    border-radius: 5px;
+    padding: 10px 20px;
+    border: 0;
+    font-size: 18pt;
+    cursor: pointer;
+}
+
+.grid-size {
+    padding-inline-end: 20px;
+    border-right: 2px solid #242633;
+}
+
+select {
+    padding: 5px 10px;
+    font-size: 15pt;
+}
+
+select:disabled {
+    color: grey;
+    background-color: #494949;
+    cursor: default;
+}
+
+.board {
+    padding: 15px;
+    display: none;
+    grid-gap: 15px;
+    background: linear-gradient(162deg, rgba(126,13,223,1) 0%, rgba(253,29,29,1) 50%, rgba(252,190,0,1) 100%);
+}
+
+.card {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+}
+
+.hidden, .show {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden; /* Safari */
+    backface-visibility: hidden;
+}
+
+.hidden {
+    border-radius: 5px;
+    background-color: #242633;
+    cursor: pointer;
+}
+
+.show {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    font-size: 5vh;
+    border-radius: 5px;
+    background-color: white;
+    transform: rotateY(180deg);
+}
+
+.rotate {
+    transform: rotateY(180deg);
+}
