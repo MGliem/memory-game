@@ -15,6 +15,7 @@ selectors = {
   moves: document.querySelector('.moves'),
   board: document.querySelector('.board'),
   gridSize: document.getElementById('gridSize'),
+  scoreBoard: document.getElementById('scoreBoard'),
 }
 
 function shuffleCards() {
@@ -195,6 +196,10 @@ function stopGame() {
   selectors.startStop.textContent = 'Start';
 }
 
+function showScoreBoard() {
+  selectors.scoreBoard.style.display = 'block';
+}
+
 function populateBoard() {
   globalVariables.totalCards = selectors.gridSize.value;
 
@@ -256,6 +261,7 @@ function resetGame() {
 }
 
 document.addEventListener("click", (event) => {
+  //showScoreBoard()
   if (event.target.id == 'startStopGame') {
     if (globalVariables.gameStarted === 0) {
       startGame();
