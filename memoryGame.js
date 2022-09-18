@@ -7,89 +7,89 @@ globalVariables = {
   visibleCards: [],
   totalCards: 0,
   totalFound: 0,
-}
+};
 
 selectors = {
-  startStop: document.getElementById('startStopGame'),
+  startStop: document.getElementById("startStopGame"),
   timer: document.querySelector(".timer"),
-  moves: document.querySelector('.moves'),
-  board: document.querySelector('.board'),
-  gridSize: document.getElementById('gridSize'),
-  scoreBoard: document.getElementById('scoreBoard'),
-}
+  moves: document.querySelector(".moves"),
+  board: document.querySelector(".board"),
+  gridSize: document.getElementById("gridSize"),
+  scoreBoard: document.getElementById("scoreBoard"),
+};
 
 function shuffleCards() {
   const emojis = [
-    '🍏', 
-    '🍎', 
-    '🍐', 
-    '🍊', 
-    '🍋', 
-    '🍌', 
-    '🍉', 
-    '🍇', 
-    '🍓', 
-    '🫐', 
-    '🍈', 
-    '🍒', 
-    '🍑', 
-    '🥭', 
-    '🍍', 
-    '🥥', 
-    '🥝', 
-    '🍅', 
-    '🍆', 
-    '🥑', 
-    '🥦', 
-    '🥬', 
-    '🥒', 
-    '🌶', 
-    '🫑', 
-    '🌽', 
-    '🥕', 
-    '🫒', 
-    '🧄', 
-    '🧅', 
-    '🥔', 
-    '🍠', 
-    '🥐',
-    '🥯', 
-    '🍞', 
-    '🥖', 
-    '🥨', 
-    '🧀', 
-    '🥚', 
-    '🍳', 
-    '🧈', 
-    '🥞', 
-    '🧇', 
-    '🥓', 
-    '🥩', 
-    '🍗', 
-    '🍖', 
-    '🦴', 
-    '🌭', 
-    '🍔', 
-    '🍟', 
-    '🍕', 
-    '🫓', 
-    '🥪', 
-    '🥙', 
-    '🧆', 
-    '🌮', 
-    '🌯', 
-    '🫔', 
-    '🥗', 
-    '🥘', 
-    '🫕', 
-    '🥫', 
-    '🍝',
+    "🍏",
+    "🍎",
+    "🍐",
+    "🍊",
+    "🍋",
+    "🍌",
+    "🍉",
+    "🍇",
+    "🍓",
+    "🫐",
+    "🍈",
+    "🍒",
+    "🍑",
+    "🥭",
+    "🍍",
+    "🥥",
+    "🥝",
+    "🍅",
+    "🍆",
+    "🥑",
+    "🥦",
+    "🥬",
+    "🥒",
+    "🌶",
+    "🫑",
+    "🌽",
+    "🥕",
+    "🫒",
+    "🧄",
+    "🧅",
+    "🥔",
+    "🍠",
+    "🥐",
+    "🥯",
+    "🍞",
+    "🥖",
+    "🥨",
+    "🧀",
+    "🥚",
+    "🍳",
+    "🧈",
+    "🥞",
+    "🧇",
+    "🥓",
+    "🥩",
+    "🍗",
+    "🍖",
+    "🦴",
+    "🌭",
+    "🍔",
+    "🍟",
+    "🍕",
+    "🫓",
+    "🥪",
+    "🥙",
+    "🧆",
+    "🌮",
+    "🌯",
+    "🫔",
+    "🥗",
+    "🥘",
+    "🫕",
+    "🥫",
+    "🍝",
   ];
 
   const cards = [];
 
   for (let i = 1; i <= globalVariables.totalCards; i++) {
-    cards.push('card' + i);
+    cards.push("card" + i);
   }
 
   globalVariables.randomCards = {};
@@ -136,18 +136,20 @@ function showCard(card) {
 
 function hideCards(card) {
   selectedCard = card.parentNode;
-  selectedCard.classList.remove('rotate');
+  selectedCard.classList.remove("rotate");
   for (const child of selectedCard.children) {
     if (child.className === "show") {
-      child.textContent = '';
+      child.textContent = "";
     }
   }
 }
 
-
 function checkClickedCards() {
   incrementMove();
-  if (globalVariables.visibleCards[0].textContent !== globalVariables.visibleCards[1].textContent) {
+  if (
+    globalVariables.visibleCards[0].textContent !==
+    globalVariables.visibleCards[1].textContent
+  ) {
     setTimeout(() => {
       hideCards(globalVariables.visibleCards[0]);
       hideCards(globalVariables.visibleCards[1]);
@@ -163,7 +165,7 @@ function checkClickedCards() {
 function checkWin() {
   if (globalVariables.totalCards == globalVariables.totalFound * 2) {
     clearInterval(globalVariables.timerInterval);
-    selectors.startStop.textContent = 'Start';
+    selectors.startStop.textContent = "Start";
     selectors.gridSize.disabled = false;
   }
 }
@@ -174,8 +176,8 @@ function incrementMove() {
 }
 
 function updateTimer() {
-    globalVariables.timer += 1;
-    selectors.timer.textContent = `time ${globalVariables.timer} sec`;
+  globalVariables.timer += 1;
+  selectors.timer.textContent = `time ${globalVariables.timer} sec`;
 }
 
 function startGame() {
@@ -184,67 +186,87 @@ function startGame() {
   selectors.gridSize.disabled = true;
   shuffleCards();
   globalVariables.gameStarted = 1;
-  selectors.startStop.textContent = 'Stop';
+  selectors.startStop.textContent = "Stop";
   globalVariables.timerInterval = setInterval(updateTimer, 1000);
 }
 
 function stopGame() {
-  clearBoard()
+  clearBoard();
   resetGame();
   selectors.gridSize.disabled = false;
   globalVariables.gameStarted = 0;
-  selectors.startStop.textContent = 'Start';
+  selectors.startStop.textContent = "Start";
 }
 
 function showScoreBoard() {
-  selectors.scoreBoard.style.display = 'block';
+  selectors.scoreBoard.style.display = "block";
+  fetch('http://localhost:5000/scores')
+    .then((res) => res.json())
+    .then((json) => console.log(json));
+}
+
+function addScore() {
+  const nickname = document.getElementById('nickname');
+  fetch('http://localhost:5000/scores', {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json, text/plain, */*',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      nickname: document.getElementById('nickname').value,
+      time: 85,
+      move: 20
+    })
+  })
+    .then(res => res.json())
+    .then(res => console.log(res));
 }
 
 function populateBoard() {
   globalVariables.totalCards = selectors.gridSize.value;
 
-  let boardSize = '';
+  let boardSize = "";
   switch (globalVariables.totalCards) {
-    case '16':
-      boardSize = '40vh';
+    case "16":
+      boardSize = "40vh";
       break;
-    case '36':
-      boardSize = '60vh';
+    case "36":
+      boardSize = "60vh";
       break;
-    case '64':
-      boardSize = '80vh';
+    case "64":
+      boardSize = "80vh";
       break;
   }
 
   selectors.board.style.width = boardSize;
   selectors.board.style.height = boardSize;
-  selectors.board.style.display = 'grid';
+  selectors.board.style.display = "grid";
 
   const rowColumns = `repeat(${Math.sqrt(globalVariables.totalCards)}, 1fr)`;
   selectors.board.style.gridTemplateColumns = rowColumns;
   selectors.board.style.gridTemplateRows = rowColumns;
 
   for (let i = 1; i <= globalVariables.totalCards; i++) {
-    const card = document.createElement('div');
-    card.id = 'card' + i;
-    card.classList.add('card');
+    const card = document.createElement("div");
+    card.id = "card" + i;
+    card.classList.add("card");
 
-    const hidden = document.createElement('div');
-    hidden.classList.add('hidden');
+    const hidden = document.createElement("div");
+    hidden.classList.add("hidden");
 
-    const show = document.createElement('div');
-    show.classList.add('show');
+    const show = document.createElement("div");
+    show.classList.add("show");
 
     card.appendChild(hidden);
     card.appendChild(show);
 
     selectors.board.appendChild(card);
-
   }
 }
 
 function clearBoard() {
-  selectors.board.style.display = 'none';
+  selectors.board.style.display = "none";
   while (selectors.board.firstChild) {
     selectors.board.removeChild(selectors.board.firstChild);
   }
@@ -261,15 +283,22 @@ function resetGame() {
 }
 
 document.addEventListener("click", (event) => {
-  //showScoreBoard()
-  if (event.target.id == 'startStopGame') {
+  showScoreBoard()
+  if (event.target.id == "startStopGame") {
     if (globalVariables.gameStarted === 0) {
       startGame();
     } else {
       stopGame();
     }
-  }
-  if (event.target.className.includes("hidden") && globalVariables.gameStarted === 1 && globalVariables.visibleCards.length < 2) {
+  };
+  if (
+    event.target.className.includes("hidden") &&
+    globalVariables.gameStarted === 1 &&
+    globalVariables.visibleCards.length < 2
+  ) {
     showCard(event.target);
-  }
+  };
+  if (event.target.id === "addScore") {
+    addScore();
+  };
 });
