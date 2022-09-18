@@ -17,7 +17,7 @@ selectors = {
   board: document.querySelector(".board"),
   gridSize: document.getElementById("gridSize"),
   scoreBoard: document.getElementById("scoreBoard"),
-  scoreTable: document.createElement('table'),
+  scoreTable: document.getElementById('scores'),
 };
 
 function shuffleCards() {
@@ -220,7 +220,7 @@ function getScores() {
 function createScoreTable(json) {
   json.sort((a, b) => a.time - b.time);
 
-  const scores = document.getElementById('scores');
+  const table = document.createElement('table')
   const trHead = document.createElement('tr');
   const thNickname = document.createElement('th');
   const textNickname = document.createTextNode('Nickname');
@@ -241,7 +241,7 @@ function createScoreTable(json) {
   trHead.appendChild(thMoves);
   trHead.appendChild(thGrid);
 
-  selectors.scoreTable.appendChild(trHead);
+  table.appendChild(trHead);
 
   for (let i = 0; i < json.length; i++) {
     const tr = document.createElement('tr');
@@ -264,14 +264,15 @@ function createScoreTable(json) {
     tr.appendChild(tdNMoves);
     tr.appendChild(tdGrid);
 
-    selectors.scoreTable.appendChild(tr);
+    table.appendChild(tr);
   }
-  scores.appendChild(selectors.scoreTable);
+  selectors.scoreTable.appendChild(table);
 }
 
 function closeScoreBoard() {
   selectors.scoreBoard.style.display = "none";
-  selectors.scoreTable.remove();
+  selectors.scoreTable.firstChild.remove();
+  document.getElementById('playerScore').textContent = '';
   stopGame();
 }
 
