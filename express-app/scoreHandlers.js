@@ -5,13 +5,14 @@ const scoreSchema = joi.object({
   nickname: joi.string().max(255).required(),
   time: joi.number().integer().required(),
   move: joi.number().integer().required(),
+  grid: joi.string().max(45).required()
 });
 
 const validateScore = (req, res, next) => {
-  const { nickname, time, move } = req.body;
+  const { nickname, time, move, grid } = req.body;
 
   const { error } = scoreSchema.validate(
-    { nickname, time, move },
+    { nickname, time, move, grid },
     { abortEarly: false }
   );
 
@@ -35,13 +36,14 @@ const getScores = (req, res) => {
 };
 
 const postScore = (req, res) => {
-  const { nickname, time, move } = req.body;
+  const { nickname, time, move, grid } = req.body;
 
   database
-    .query("insert into scores (nickname, time, move) values (?, ?, ?)", [
+    .query("insert into scores (nickname, time, move, grid) values (?, ?, ?, ?)", [
       nickname,
       time,
       move,
+      grid,
     ])
     .then(([result]) => {
       res.location("/").sendStatus(201);
