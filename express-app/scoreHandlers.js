@@ -34,7 +34,7 @@ const getScores = (req, res) => {
     });
 };
 
-const postScore = () => {
+const postScore = (req, res) => {
   const { nickname, time, move } = req.body;
 
   database
