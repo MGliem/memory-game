@@ -7,6 +7,7 @@ globalVariables = {
   visibleCards: [],
   totalCards: 0,
   totalFound: 0,
+  api: 'http://localhost:5000/scores',
 };
 
 selectors = {
@@ -16,6 +17,7 @@ selectors = {
   board: document.querySelector(".board"),
   gridSize: document.getElementById("gridSize"),
   scoreBoard: document.getElementById("scoreBoard"),
+  scoreTable: document.createElement('table'),
 };
 
 function shuffleCards() {
@@ -154,7 +156,7 @@ function checkClickedCards() {
       hideCards(globalVariables.visibleCards[0]);
       hideCards(globalVariables.visibleCards[1]);
       globalVariables.visibleCards = [];
-    }, "1000");
+    }, '1000');
   } else {
     globalVariables.totalFound++;
     globalVariables.visibleCards = [];
@@ -167,6 +169,9 @@ function checkWin() {
     clearInterval(globalVariables.timerInterval);
     selectors.startStop.textContent = "Start";
     selectors.gridSize.disabled = false;
+    setTimeout(() => {
+      showScoreBoard();
+    }, '1000');
   }
 }
 
@@ -200,14 +205,79 @@ function stopGame() {
 
 function showScoreBoard() {
   selectors.scoreBoard.style.display = "block";
-  fetch('http://localhost:5000/scores')
-    .then((res) => res.json())
-    .then((json) => console.log(json));
+  const playerScore = document.getElementById('playerScore');
+  const scoreText = `${globalVariables.moves} moves in ${globalVariables.timer} secondes`;
+  playerScore.appendChild(document.createTextNode(scoreText));
+  getScores();
+}
+
+function getScores() {
+  fetch(globalVariables.api)
+  .then((res) => res.json())
+  .then((json) => createScoreTable(json));
+}
+
+function createScoreTable(json) {
+  json.sort((a, b) => a.time - b.time);
+
+  const scores = document.getElementById('scores');
+  const trHead = document.createElement('tr');
+  const thNickname = document.createElement('th');
+  const textNickname = document.createTextNode('Nickname');
+  const thTime = document.createElement('th');
+  const textTime = document.createTextNode('Time');
+  const thMoves = document.createElement('th');
+  const textMoves = document.createTextNode('Moves');
+  const thGrid = document.createElement('th');
+  const textGrid = document.createTextNode('Grid size');
+
+  thNickname.appendChild(textNickname);
+  thTime.appendChild(textTime);
+  thMoves.appendChild(textMoves);
+  thGrid.appendChild(textGrid);
+
+  trHead.appendChild(thNickname);
+  trHead.appendChild(thTime);
+  trHead.appendChild(thMoves);
+  trHead.appendChild(thGrid);
+
+  selectors.scoreTable.appendChild(trHead);
+
+  for (let i = 0; i < json.length; i++) {
+    const tr = document.createElement('tr');
+    const tdNickname = document.createElement('td');
+    const textPlayer = document.createTextNode(json[i].nickname);
+    const tdTime = document.createElement('td');
+    const textPlayerTime = document.createTextNode(json[i].time);
+    const tdNMoves = document.createElement('td');
+    const textPlayerMoves = document.createTextNode(json[i].move);
+    const tdGrid = document.createElement('td');
+    const textPlayerGrid = document.createTextNode(json[i].grid);
+
+    tdNickname.appendChild(textPlayer);
+    tdTime.appendChild(textPlayerTime);
+    tdNMoves.appendChild(textPlayerMoves);
+    tdGrid.appendChild(textPlayerGrid);
+
+    tr.appendChild(tdNickname);
+    tr.appendChild(tdTime);
+    tr.appendChild(tdNMoves);
+    tr.appendChild(tdGrid);
+
+    selectors.scoreTable.appendChild(tr);
+  }
+  scores.appendChild(selectors.scoreTable);
+}
+
+function closeScoreBoard() {
+  selectors.scoreBoard.style.display = "none";
+  selectors.scoreTable.remove();
+  stopGame();
 }
 
 function addScore() {
   const nickname = document.getElementById('nickname');
-  fetch('http://localhost:5000/scores', {
+  fetch(globalVariables.api, {
     method: 'POST',
     headers: {
       'Accept': 'application/json, text/plain, */*',
@@ -215,12 +285,12 @@ function addScore() {
     },
     body: JSON.stringify({
       nickname: document.getElementById('nickname').value,
-      time: 85,
-      move: 20
+      time: globalVariables.timer,
+      move: globalVariables.moves,
+      grid: `${Math.sqrt(globalVariables.totalCards)}x${Math.sqrt(globalVariables.totalCards)}`,
     })
   })
-    .then(res => res.json())
-    .then(res => console.log(res));
+    .then(closeScoreBoard());
 }
 
 function populateBoard() {
@@ -266,7 +336,7 @@ function populateBoard() {
 }
 
 function clearBoard() {
-  selectors.board.style.display = "none";
+  selectors.board.style.display = 'none';
   while (selectors.board.firstChild) {
     selectors.board.removeChild(selectors.board.firstChild);
   }
@@ -283,7 +353,6 @@ function resetGame() {
 }
 
 document.addEventListener("click", (event) => {
-  showScoreBoard()
   if (event.target.id == "startStopGame") {
     if (globalVariables.gameStarted === 0) {
       startGame();
@@ -300,5 +369,8 @@ document.addEventListener("click", (event) => {
   };
   if (event.target.id === "addScore") {
     addScore();
+  };
+  if (event.target.id === "closeScore") {
+    closeScoreBoard();
   };
 });
